@@ -1,0 +1,91 @@
+
+Tabla: usuarios(id, nombre, email, activo)
+
+Pregunta:
+Obtén los nombres y correos de los usuarios que están activos.
+
+Solución:
+
+SELECT nombre, email
+FROM usuarios
+WHERE activo = 1;
+
+===================================
+
+Tablas:
+
+usuarios(id, nombre)
+
+pedidos(id, usuario_id, fecha_pedido)
+
+Pregunta:
+Devuelve el nombre del usuario y el número de pedidos que ha realizado.
+
+Solución:
+
+SELECT u.nombre, COUNT(p.id) AS total_pedidos
+FROM usuarios u
+LEFT JOIN pedidos p ON u.id = p.usuario_id
+GROUP BY u.nombre;
+
+===================================
+
+Tabla: usuarios(id, nombre, email)
+
+Pregunta:
+Encuentra los correos electrónicos que están duplicados.
+
+Solución:
+
+SELECT email, COUNT(*) AS cantidad
+FROM usuarios
+GROUP BY email
+HAVING COUNT(*) > 1;
+
+==================================
+Tablas:
+
+pedidos(id)
+
+productos_pedido(id, pedido_id, producto_id)
+
+Pregunta:
+Encuentra los pedidos que no tienen ningún producto asociado.
+
+Solución:
+
+SELECT pedidos.id
+FROM pedidos
+LEFT JOIN productos_pedido ON pedidos.id = productos_pedido.pedido_id
+WHERE productos_pedido.id IS NULL;
+
+Otra solución
+
+SELECT pedidos.id
+FROM pedidos
+LEFT JOIN productos_pedido ON pedidos.id = productos_pedido.pedido_id
+WHERE productos_pedido.producto_id IS NULL;
+
+
+================================
+
+Tablas:
+
+productos(id, nombre)
+
+productos_pedido(producto_id, pedido_id)
+
+Pregunta:
+¿Cuál es el producto más vendido?
+
+Solución:
+
+SELECT productos.nombre, COUNT(*) AS veces_vendido
+FROM productos
+JOIN productos_pedido ON productos.id = productos_pedido.producto_id
+GROUP BY productos.nombre
+ORDER BY veces_vendido DESC
+LIMIT 1;
+
+=================================
+
